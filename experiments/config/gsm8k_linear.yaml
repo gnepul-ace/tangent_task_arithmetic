@@ -1,0 +1,21 @@
+# Configuration for GSM8K dataset with Linearized Model
+
+__base__: "base_config.yaml"
+
+model:
+  name: "Qwen/Qwen2.5-Math-1.5B-Instruct"
+  use_linearized: true
+
+training:
+  num_steps: 5000
+  kl_target: 0.01
+  learning_rate: 5.0e-6
+
+dataset:
+  name: "gsm8k"
+  train_split: "train"
+  max_samples: 7473  # Full GSM8K training set
+
+wandb:
+  run_name: "gsm8k-linear-tangent-space"
+  tags: ["gsm8k", "linearized", "tangent-space"]

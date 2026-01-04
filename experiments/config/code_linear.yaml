@@ -1,0 +1,22 @@
+# Configuration for Code Generation with Linearized Model
+
+__base__: "base_config.yaml"
+
+model:
+  name: "Qwen/Qwen2.5-Math-1.5B-Instruct"  # Good for code too
+  use_linearized: true
+
+training:
+  num_steps: 8000
+  kl_target: 0.01
+  learning_rate: 5.0e-6
+  max_new_tokens: 1024  # Longer for code
+
+dataset:
+  name: "code"
+  train_split: "train"
+  max_samples: 10000
+
+wandb:
+  run_name: "code-linear-tangent-space"
+  tags: ["code", "linearized", "tangent-space"]

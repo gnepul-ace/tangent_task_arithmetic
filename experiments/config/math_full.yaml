@@ -1,0 +1,25 @@
+# Configuration for MATH dataset with Full Model (Baseline)
+
+__base__: "base_config.yaml"
+
+model:
+  name: "Qwen/Qwen2.5-Math-1.5B-Instruct"
+  use_linearized: false  # Baseline: full model
+
+training:
+  num_steps: 10000
+  kl_target: 0.01
+  learning_rate: 1.0e-5
+
+dataset:
+  name: "math"
+  train_split: "train[3:]"
+  max_samples: 7500
+
+geometric_analysis:
+  enabled: true
+  analyze_every_n_steps: 100
+
+wandb:
+  run_name: "math-full-baseline"
+  tags: ["math", "full-model", "baseline"]

@@ -1,0 +1,158 @@
+# Base Configuration for RLHF in Tangent Space Experiments
+
+# Model Configuration
+model:
+  name: "Qwen/Qwen2.5-Math-1.5B-Instruct"  # Base model
+  use_linearized: false  # Set to true for tangent space training
+  dtype: "bfloat16"
+  flash_attention: true
+
+# Training Configuration
+training:
+  # RL Algorithm
+  algorithm: "ppo"  # "ppo" or "grpo"
+  num_steps: 10000
+  batch_size: 8
+  mini_batch_size: 4
+  gradient_accumulation_steps: 1
+
+  # Optimization
+  learning_rate: 1.0e-5
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  warmup_steps: 100
+
+  # PPO specific
+  ppo_epochs: 4
+  ppo_clip_range: 0.2
+  value_clip_range: 0.2
+  clip_range_vf: null
+
+  # KL Constraint
+  kl_coeff: 0.01
+  kl_target: 0.01
+  adaptive_kl: true
+  adaptive_kl_horizon: 10000
+
+  # Generation
+  max_new_tokens: 512
+  temperature: 1.0
+  top_p: 0.9
+  top_k: null
+
+  # Logging
+  log_every_n_steps: 10
+  eval_every_n_steps: 100
+  save_every_n_steps: 500
+  output_dir: "./outputs"
+
+  # Distributed Training
+  use_deepspeed: false
+  use_fsdp: false
+  num_gpus: 8
+  per_device_train_batch_size: 1
+  per_device_eval_batch_size: 2
+
+# Geometric Analysis Configuration
+geometric_analysis:
+  enabled: true
+
+  # Analysis Frequency
+  analyze_every_n_steps: 100
+  quick_check_every_n_steps: 10
+
+  # Components
+  track_riemannian: true
+  track_fisher_steering: true
+  track_sequence_stability: true
+  track_ntk: true
+  compute_fisher: true
+
+  # Fisher Information
+  fisher:
+    num_batches: 50
+    update_interval: 500
+    use_empirical: true
+    block_diagonal: true
+    num_top_eigenvectors: 100
+    damping: 1.0e-5
+
+  # NTK Tracking
+  ntk:
+    num_samples: 100
+    diagonal_only: true
+    lazy_threshold: 0.1
+    track_spectrum: false  # Set to true for full eigenspectrum
+
+  # Riemannian Confinement
+  riemannian:
+    num_samples_kl: 1000
+    use_fisher: true
+    track_per_layer: false  # Save memory
+    kl_epsilon: 0.01
+    bound_tolerance: 1.2
+
+  # Fisher Steering
+  fisher_steering:
+    num_principal_components: 100
+    compute_alignment: true
+    compute_participation_ratio: true
+    steering_score_threshold: 1.0
+
+  # Sequence Stability
+  sequence_stability:
+    sequence_lengths: [64, 128, 256, 512]
+    num_samples: 100
+    compute_per_position: true
+    compute_growth_rate: true
+    sublinear_threshold: 0.7
+
+  # Checkpointing
+  save_analysis_checkpoints: true
+  checkpoint_dir: "./checkpoints/analysis"
+
+  # Visualization
+  generate_plots: true
+  plot_dir: "./plots"
+  plot_every_n_steps: 500
+
+# Dataset Configuration
+dataset:
+  name: "math"  # "math", "gsm8k", "code"
+  train_split: "train"
+  eval_split: "test"
+  max_samples: null  # null = use all
+  seed: 42
+
+  # Preprocessing
+  max_length: 1024
+  padding: "max_length"
+  truncation: true
+
+# Reward Model Configuration
+reward:
+  type: "outcome"  # "outcome", "process", or "model"
+  model_name: null  # HF model if type=="model"
+  correct_reward: 1.0
+  incorrect_reward: -1.0
+
+# Evaluation Configuration
+evaluation:
+  metrics: ["accuracy", "pass@1", "pass@10"]
+  num_eval_samples: 500
+  generation_kwargs:
+    max_new_tokens: 512
+    temperature: 0.0  # Greedy for evaluation
+    do_sample: false
+
+# Weights & Biases
+wandb:
+  enabled: true
+  project: "rlhf-tangent-space"
+  entity: null
+  run_name: null  # Auto-generated if null
+  tags: ["rlhf", "tangent-space", "geometric-analysis"]
+
+# Reproducibility
+seed: 42
+deterministic: false

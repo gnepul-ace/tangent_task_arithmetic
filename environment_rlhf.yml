@@ -1,0 +1,62 @@
+name: tangent-rlhf
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - scipy
+  - matplotlib
+  - seaborn
+  - jupyter
+  - ipykernel
+  - pyyaml
+
+  # PyTorch (CUDA 12.1 for H100)
+  - pytorch::pytorch=2.1.0
+  - pytorch::torchvision
+  - pytorch::pytorch-cuda=12.1
+
+  - pip:
+      # Core ML frameworks
+      - transformers>=4.35.0
+      - accelerate>=0.25.0
+      - datasets>=2.15.0
+      - tokenizers>=0.15.0
+
+      # RLHF frameworks (choose one or both)
+      - verl>=0.1.0  # volcengine RLHF library
+      # - oat  # From understand-r1-zero (install separately)
+
+      # RL and optimization
+      - torch-optimizer
+      - tqdm
+      - einops
+
+      # Distributed training
+      - deepspeed>=0.12.0
+      - ninja  # For JIT compilation
+
+      # Monitoring and logging
+      - wandb
+      - tensorboard
+      - rich
+
+      # Utilities
+      - omegaconf
+      - hydra-core
+      - pydantic
+
+      # Testing
+      - pytest
+      - pytest-cov
+
+      # Math datasets
+      - openai  # For grading
+
+      # Code evaluation
+      - fire

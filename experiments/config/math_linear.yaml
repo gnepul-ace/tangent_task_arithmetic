@@ -1,0 +1,27 @@
+# Configuration for MATH dataset with Linearized Model (Tangent Space)
+
+# Inherit from base config
+__base__: "base_config.yaml"
+
+# Experiment-specific settings
+model:
+  name: "Qwen/Qwen2.5-Math-1.5B-Instruct"
+  use_linearized: true  # KEY: Train in tangent space!
+
+training:
+  num_steps: 10000
+  kl_target: 0.01  # Strict KL constraint
+  learning_rate: 5.0e-6  # Lower LR for stability
+
+dataset:
+  name: "math"
+  train_split: "train[3:]"  # MATH levels 3-5 (harder problems)
+  max_samples: 7500
+
+geometric_analysis:
+  enabled: true
+  analyze_every_n_steps: 50  # More frequent for linearized
+
+wandb:
+  run_name: "math-linear-tangent-space"
+  tags: ["math", "linearized", "tangent-space"]

@@ -1,0 +1,46 @@
+# RLHF in Tangent Space - Requirements
+
+# Core ML
+torch>=2.1.0
+transformers>=4.35.0
+accelerate>=0.25.0
+datasets>=2.15.0
+tokenizers>=0.15.0
+
+# RLHF frameworks
+verl>=0.1.0
+
+# RL and optimization
+torch-optimizer
+tqdm
+einops
+scipy
+numpy
+
+# Distributed training
+deepspeed>=0.12.0
+ninja
+
+# Monitoring
+wandb
+tensorboard
+rich
+
+# Configuration
+omegaconf
+hydra-core
+pyyaml
+pydantic
+
+# Visualization
+matplotlib
+seaborn
+
+# Utilities
+fire
+pytest
+pytest-cov
+
+# Optional: Install oat separately from understand-r1-zero repo
+# git clone https://github.com/sail-sg/understand-r1-zero.git
+# cd understand-r1-zero && pip install -e .
